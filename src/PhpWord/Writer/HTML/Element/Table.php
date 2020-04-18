@@ -51,6 +51,7 @@ class Table extends AbstractElement
                 $rowCellCount = count($rowCells);
                 for ($j = 0; $j < $rowCellCount; $j++) {
                     $cellStyle = $rowCells[$j]->getStyle();
+                    $cellStyleCss = self::getTableStyle($cellStyle);
                     $cellBgColor = $cellStyle->getBgColor();
                     $cellFgColor = null;
                     if ($cellBgColor) {
@@ -84,7 +85,7 @@ class Table extends AbstractElement
                         $cellRowSpanAttr = ($cellRowSpan > 1 ? " rowspan=\"{$cellRowSpan}\"" : '');
                         $cellBgColorAttr = (is_null($cellBgColor) ? '' : " bgcolor=\"#{$cellBgColor}\"");
                         $cellFgColorAttr = (is_null($cellFgColor) ? '' : " color=\"#{$cellFgColor}\"");
-                        $content .= "<{$cellTag}{$cellColSpanAttr}{$cellRowSpanAttr}{$cellBgColorAttr}{$cellFgColorAttr}>" . PHP_EOL;
+                        $content .= "<{$cellTag}{$cellStyleCss}{$cellColSpanAttr}{$cellRowSpanAttr}{$cellBgColorAttr}{$cellFgColorAttr}>" . PHP_EOL;
                         $writer = new Container($this->parentWriter, $rowCells[$j]);
                         $content .= $writer->write();
                         if ($cellRowSpan > 1) {
@@ -117,18 +118,38 @@ class Table extends AbstractElement
     /**
      * Translates Table style in CSS equivalent
      *
-     * @param string|\PhpOffice\PhpWord\Style\Table|null $tableStyle
+     * @param string|\PhpOffice\PhpWord\Style\Table|\PhpOffice\PhpWord\Style\Cell|null $tableStyle
      * @return string
      */
-    private function getTableStyle($tableStyle = null)
+    private static function getTableStyle($tableStyle = null)
     {
         if ($tableStyle == null) {
             return '';
         }
         if (is_string($tableStyle)) {
             $style = ' class="' . $tableStyle;
-        } else {
-            $style = ' style="';
+
+            return $style . '"';
+        }
+
+        $style = self::getTableStyleString($tableStyle);
+        if ($style === '') {
+            return '';
+        }
+
+        return ' style="' . $style . '"';
+    }
+
+    /**
+     * Translates Table style in CSS equivalent
+     *
+     * @param string|\PhpOffice\PhpWord\Style\Table|\PhpOffice\PhpWord\Style\Cell $tableStyle
+     * @return string
+     */
+    public static function getTableStyleString($tableStyle)
+    {
+        $style = '';
+        if (method_exists($tableStyle, 'getLayout')) {
             if ($tableStyle->getLayout() == \PhpOffice\PhpWord\Style\Table::LAYOUT_FIXED) {
                 $style .= 'table-layout: fixed;';
             } elseif ($tableStyle->getLayout() == \PhpOffice\PhpWord\Style\Table::LAYOUT_AUTO) {
@@ -136,6 +157,33 @@ class Table extends AbstractElement
             }
         }
 
-        return $style . '"';
+        $dirs = array('Top', 'Left', 'Bottom', 'Right');
+        $testmethprefix = 'getBorder';
+        foreach ($dirs as $dir) {
+            $testmeth = $testmethprefix . $dir . 'Style';
+            if (method_exists($tableStyle, $testmeth)) {
+                $outval = $tableStyle->{$testmeth}();
+                if (is_string($outval) && 1 == preg_match('/^[a-z]+$/', $outval)) {
+                    $style .= ' border-' . lcfirst($dir) . '-style: ' . $outval . ';';
+                }
+            }
+            $testmeth = $testmethprefix . $dir . 'Color';
+            if (method_exists($tableStyle, $testmeth)) {
+                $outval = $tableStyle->{$testmeth}();
+                if (is_string($outval) && 1 == preg_match('/^[a-z]+$/', $outval)) {
+                    $style .= ' border-' . lcfirst($dir) . '-color: ' . $outval . ';';
+                }
+            }
+            $testmeth = $testmethprefix . $dir . 'Size';
+            if (method_exists($tableStyle, $testmeth)) {
+                $outval = $tableStyle->{$testmeth}();
+                if (is_numeric($outval)) {
+                    // size is in twips - divide by 20 to get points
+                    $style .= ' border-' . lcfirst($dir) . '-width: ' . ((string) ($outval / 20)) . 'pt;';
+                }
+            }
+        }
+
+        return $style;
     }
 }

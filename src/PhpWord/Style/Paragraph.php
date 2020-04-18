@@ -85,7 +85,7 @@ class Paragraph extends Border
     /**
      * Indentation
      *
-     * @var \PhpOffice\PhpWord\Style\Indentation
+     * @var \PhpOffice\PhpWord\Style\Indentation|null
      */
     private $indentation;
 
@@ -99,7 +99,7 @@ class Paragraph extends Border
     /**
      * Text line height
      *
-     * @var int
+     * @var int|float|null
      */
     private $lineHeight;
 
@@ -198,7 +198,7 @@ class Paragraph extends Border
     {
         $key = Text::removeUnderscorePrefix($key);
         if ('indent' == $key || 'hanging' == $key) {
-            $value = $value * 720;
+            $value = $value * 720; // 720 twips is 0.5 inch
         }
 
         return parent::setStyleValue($key, $value);
@@ -343,9 +343,9 @@ class Paragraph extends Border
     }
 
     /**
-     * Get shading
+     * Get indentation
      *
-     * @return \PhpOffice\PhpWord\Style\Indentation
+     * @return \PhpOffice\PhpWord\Style\Indentation|null
      */
     public function getIndentation()
     {
@@ -519,7 +519,7 @@ class Paragraph extends Border
     /**
      * Get line height
      *
-     * @return int|float
+     * @return int|float|null
      */
     public function getLineHeight()
     {

@@ -130,6 +130,16 @@ To turn it on set ``outputEscapingEnabled`` option to ``true`` in your PHPWord c
 
     \PhpOffice\PhpWord\Settings::setOutputEscapingEnabled(true);
 
+Default Paper
+~~~~~~~~~~~~~
+
+By default, all sections of the document will print on A4 paper.
+You can alter the default paper by using the following function:
+
+.. code-block:: php
+
+    \PhpOffice\PhpWord\Settings::setDefaultPaper('Letter');
+
 Default font
 ~~~~~~~~~~~~
 
@@ -140,6 +150,14 @@ default font by using the following two functions:
 
     $phpWord->setDefaultFontName('Times New Roman');
     $phpWord->setDefaultFontSize(12);
+
+When generating html/pdf, you can alter the default handling of white space (normal),
+and/or supply a fallback generic font as follows:
+
+.. code-block:: php
+
+    $phpWord->setDefaultHtmlGenericFont('serif');
+    $phpWord->setDefaultHtmlWhiteSpace('pre-wrap');
 
 Document settings
 -----------------
