@@ -147,7 +147,13 @@ class Document extends AbstractPart
 
         $sections = $this->getParentWriter()->getPhpWord()->getSections();
         $evenOdd = $this->getParentWriter()->getPhpWord()->getSettings()->hasEvenAndOddHeaders();
+        $addSectTag = false;
         foreach ($sections as $section) {
+            if ($addSectTag) { // Owen 2021-05-18
+                $content .= '\sect' . PHP_EOL;
+            } else {
+                $addSectTag = true;
+            }
             $styleWriter = new SectionStyleWriter($section->getStyle());
             $styleWriter->setParentWriter($this->getParentWriter());
             $content .= $styleWriter->write();
@@ -196,8 +202,6 @@ class Document extends AbstractPart
 
             $elementWriter = new Container($this->getParentWriter(), $section);
             $content .= $elementWriter->write();
-
-            $content .= '\sect' . PHP_EOL;
         }
 
         return $content;
