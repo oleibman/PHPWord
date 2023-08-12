@@ -19,8 +19,15 @@ if ($globFiles === false) {
     exit(2);
 }
 foreach ($globFiles as $globFile) {
-    echo "Processing $globFile\n";
-    require $globFile;
+    if (
+        strpos($globFile, 'Sample_13_Images') !== false
+        || strpos($globFile, 'Sample_30_ReadHTML') !== false
+    ) {
+        echo "***** Skipping $globFile\n";
+    } else {
+        echo "Processing $globFile\n";
+        require $globFile;
+    }
     echo "\n";
 }
 
