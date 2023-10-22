@@ -408,7 +408,13 @@ class DocumentTest extends \PHPUnit\Framework\TestCase
         // behind
         $element = $doc->getElement('/w:document/w:body/w:p[2]/w:r/w:pict/v:shape');
         $style = $element->getAttribute('style');
-        self::assertRegExp('/z\-index:\-[0-9]*/', $style);
+        if (method_exists(self::class, 'assertMatchesRegularExpression')) {
+            self::assertMatchesRegularExpression('/z\-index:\-[0-9]*/', $style);
+        } elseif (method_exists(self::class, 'assertRegExp')) {
+            self::assertRegExp('/z\-index:\-[0-9]*/', $style);
+        } else {
+            self::fail('Unsure how to test regexp');
+        }
 
         // square
         $element = $doc->getElement('/w:document/w:body/w:p[4]/w:r/w:pict/v:shape/w10:wrap');
