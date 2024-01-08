@@ -2066,6 +2066,11 @@ Search.appendIndex(
             "summary": "Set\u0020Paragraph\u0020style.",
             "url": "classes/PhpOffice-PhpWord-Element-TextRun.html#method_setParagraphStyle"
         },                {
+            "fqsen": "\\PhpOffice\\PhpWord\\Element\\TextRun\u003A\u003AgetText\u0028\u0029",
+            "name": "getText",
+            "summary": "",
+            "url": "classes/PhpOffice-PhpWord-Element-TextRun.html#method_getText"
+        },                {
             "fqsen": "\\PhpOffice\\PhpWord\\Element\\TextRun\u003A\u003A\u0024container",
             "name": "container",
             "summary": "Container\u0020type\u0020Section\u007CHeader\u007CFooter\u007CFootnote\u007CEndnote\u007CCell\u007CTextRun\u007CTextBox\u007CListItemRun\u007CTrackChange.",
@@ -3556,6 +3561,21 @@ Search.appendIndex(
             "summary": "Read\u0020content.xml.",
             "url": "classes/PhpOffice-PhpWord-Reader-ODText-Content.html#method_read"
         },                {
+            "fqsen": "\\PhpOffice\\PhpWord\\Reader\\ODText\\Content\u003A\u003AprocessNodes\u0028\u0029",
+            "name": "processNodes",
+            "summary": "",
+            "url": "classes/PhpOffice-PhpWord-Reader-ODText-Content.html#method_processNodes"
+        },                {
+            "fqsen": "\\PhpOffice\\PhpWord\\Reader\\ODText\\Content\u003A\u003AgetSection\u0028\u0029",
+            "name": "getSection",
+            "summary": "",
+            "url": "classes/PhpOffice-PhpWord-Reader-ODText-Content.html#method_getSection"
+        },                {
+            "fqsen": "\\PhpOffice\\PhpWord\\Reader\\ODText\\Content\u003A\u003A\u0024section",
+            "name": "section",
+            "summary": "",
+            "url": "classes/PhpOffice-PhpWord-Reader-ODText-Content.html#property_section"
+        },                {
             "fqsen": "\\PhpOffice\\PhpWord\\Reader\\ODText\\Meta",
             "name": "Meta",
             "summary": "Meta\u0020reader.",
@@ -4965,6 +4985,16 @@ Search.appendIndex(
             "name": "parseHorizRule",
             "summary": "Render\u0020horizontal\u0020rule\nNote\u003A\u0020Word\u0020rule\u0020is\u0020not\u0020the\u0020same\u0020as\u0020HTML\u0027s\u0020\u003Chr\u003E\u0020since\u0020it\u0020does\u0020not\u0020support\u0020width\u0020and\u0020thus\u0020neither\u0020alignment.",
             "url": "classes/PhpOffice-PhpWord-Shared-Html.html#method_parseHorizRule"
+        },                {
+            "fqsen": "\\PhpOffice\\PhpWord\\Shared\\Html\u003A\u003AconvertRgb\u0028\u0029",
+            "name": "convertRgb",
+            "summary": "",
+            "url": "classes/PhpOffice-PhpWord-Shared-Html.html#method_convertRgb"
+        },                {
+            "fqsen": "\\PhpOffice\\PhpWord\\Shared\\Html\u003A\u003ARGB_REGEXP",
+            "name": "RGB_REGEXP",
+            "summary": "",
+            "url": "classes/PhpOffice-PhpWord-Shared-Html.html#constant_RGB_REGEXP"
         },                {
             "fqsen": "\\PhpOffice\\PhpWord\\Shared\\Html\u003A\u003A\u0024listIndex",
             "name": "listIndex",
@@ -12251,6 +12281,11 @@ Search.appendIndex(
             "summary": "Set\u0020values\u0020from\u0020a\u0020one\u002Ddimensional\u0020array\u0020of\u0020\u0022variable\u0020\u003D\u003E\u0020value\u0022\u002Dpairs.",
             "url": "classes/PhpOffice-PhpWord-TemplateProcessor.html#method_setValues"
         },                {
+            "fqsen": "\\PhpOffice\\PhpWord\\TemplateProcessor\u003A\u003AsetCheckbox\u0028\u0029",
+            "name": "setCheckbox",
+            "summary": "",
+            "url": "classes/PhpOffice-PhpWord-TemplateProcessor.html#method_setCheckbox"
+        },                {
             "fqsen": "\\PhpOffice\\PhpWord\\TemplateProcessor\u003A\u003AsetChart\u0028\u0029",
             "name": "setChart",
             "summary": "",
@@ -12425,6 +12460,11 @@ Search.appendIndex(
             "name": "indexClonedVariables",
             "summary": "Replaces\u0020variable\u0020names\u0020in\u0020cloned\nrows\/blocks\u0020with\u0020indexed\u0020names.",
             "url": "classes/PhpOffice-PhpWord-TemplateProcessor.html#method_indexClonedVariables"
+        },                {
+            "fqsen": "\\PhpOffice\\PhpWord\\TemplateProcessor\u003A\u003AreplaceCarriageReturns\u0028\u0029",
+            "name": "replaceCarriageReturns",
+            "summary": "Replace\u0020carriage\u0020returns\u0020with\u0020xml.",
+            "url": "classes/PhpOffice-PhpWord-TemplateProcessor.html#method_replaceCarriageReturns"
         },                {
             "fqsen": "\\PhpOffice\\PhpWord\\TemplateProcessor\u003A\u003AreplaceClonedVariables\u0028\u0029",
             "name": "replaceClonedVariables",
@@ -13880,6 +13920,11 @@ Search.appendIndex(
             "name": "writeNumpages",
             "summary": "",
             "url": "classes/PhpOffice-PhpWord-Writer-RTF-Element-Field.html#method_writeNumpages"
+        },                {
+            "fqsen": "\\PhpOffice\\PhpWord\\Writer\\RTF\\Element\\Field\u003A\u003AwriteFilename\u0028\u0029",
+            "name": "writeFilename",
+            "summary": "",
+            "url": "classes/PhpOffice-PhpWord-Writer-RTF-Element-Field.html#method_writeFilename"
         },                {
             "fqsen": "\\PhpOffice\\PhpWord\\Writer\\RTF\\Element\\Field\u003A\u003AwriteDate\u0028\u0029",
             "name": "writeDate",
