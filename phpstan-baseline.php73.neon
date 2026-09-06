@@ -827,7 +827,7 @@ parameters:
 
 		-
 			message: "#^Call to an undefined method object\\:\\:write\\(\\)\\.$#"
-			count: 2
+			count: 1
 			path: src/PhpWord/Writer/ODText/Part/Styles.php
 
 		-
