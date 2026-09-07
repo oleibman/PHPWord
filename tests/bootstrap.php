@@ -53,6 +53,10 @@ function phpunit10ErrorHandler(int $errno, string $errstr, string $filename, int
         if (0 === $x) {
             return true; // message suppressed - stop error handling
         }
+        // temporary - mpdf override not working for some reason
+        if (preg_match('/Function mb_\w+[(][)] is deprecated since 8[.]6/', $errstr) === 1) {
+            return true;
+        }
 
         throw new Exception("$errstr $filename $lineno");
     }
