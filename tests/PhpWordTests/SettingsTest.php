@@ -235,7 +235,7 @@ class SettingsTest extends TestCase
             'defaultFontName' => 'Arial',
             'defaultFontSize' => 10,
             'defaultFontColor' => '000000',
-            'outputEscapingEnabled' => false,
+            'outputEscapingEnabled' => Settings::DEFAULT_OUTPUT_ESCAPING_ENABLED,
             'defaultPaper' => 'A4',
         ];
 

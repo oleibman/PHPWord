@@ -162,13 +162,15 @@ class Settings
      */
     private static $tempDir = '';
 
+    public const DEFAULT_OUTPUT_ESCAPING_ENABLED = false;
+
     /**
      * Enables built-in output escaping mechanism.
      * Default value is `false` for backward compatibility with versions below 0.13.0.
      *
      * @var bool
      */
-    private static $outputEscapingEnabled = false;
+    private static $outputEscapingEnabled = self::DEFAULT_OUTPUT_ESCAPING_ENABLED;
 
     /**
      * Return the compatibility option used by the XMLWriter.
@@ -540,7 +542,7 @@ class Settings
         self::$defaultPaper = self::DEFAULT_PAPER;
         self::$defaultRtl = null;
         self::$measurementUnit = self::UNIT_TWIP;
-        self::$outputEscapingEnabled = false;
+        self::$outputEscapingEnabled = self::DEFAULT_OUTPUT_ESCAPING_ENABLED;
         self::$pdfRendererName = null;
         self::$pdfRendererOptions = [];
         self::$pdfRendererPath = null;

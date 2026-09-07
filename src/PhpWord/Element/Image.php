@@ -653,10 +653,16 @@ class Image extends AbstractElement
         if ($xml === false) {
             throw new InvalidImageException("Impossible de lire le fichier SVG: $file");
         }
-        libxml_use_internal_errors(true);
+        $orig = false;
         $dom = new DOMDocument();
-        if (!$dom->loadXML($xml)) {
-            throw new InvalidImageException('SVG invalide ou mal formé');
+
+        try {
+            $orig = libxml_use_internal_errors(true);
+            if (!$dom->loadXML($xml)) {
+                throw new InvalidImageException('SVG invalide ou mal formé');
+            }
+        } finally {
+            libxml_use_internal_errors($orig);
         }
         $svg = $dom->documentElement;
 

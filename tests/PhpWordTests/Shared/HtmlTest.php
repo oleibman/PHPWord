@@ -50,6 +50,7 @@ class HtmlTest extends AbstractWebServerEmbedded
      */
     protected function tearDown(): void
     {
+        Settings::restoreDefaults();
         TestHelperDOCX::clear();
     }
 

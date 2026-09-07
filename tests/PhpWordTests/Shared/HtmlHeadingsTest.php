@@ -32,6 +32,11 @@ use PHPUnit\Framework\TestCase;
  */
 class HtmlHeadingsTest extends TestCase
 {
+    protected function tearDown(): void
+    {
+        Settings::restoreDefaults();
+    }
+
     public function testRoundTripHeadings(): void
     {
         Settings::setOutputEscapingEnabled(true);

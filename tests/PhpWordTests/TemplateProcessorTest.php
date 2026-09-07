@@ -52,6 +52,7 @@ final class TemplateProcessorTest extends \PHPUnit\Framework\TestCase
 
     protected function tearDown(): void
     {
+        Settings::restoreDefaults();
         if ($this->templateProcessor !== null) {
             $filename = $this->templateProcessor->getTempDocumentFilename();
             $this->templateProcessor = null;

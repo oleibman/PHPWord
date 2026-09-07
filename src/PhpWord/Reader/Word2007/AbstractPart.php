@@ -32,6 +32,7 @@ use PhpOffice\PhpWord\Element\Text;
 use PhpOffice\PhpWord\Element\TextRun;
 use PhpOffice\PhpWord\Element\TrackChange;
 use PhpOffice\PhpWord\PhpWord;
+use PhpOffice\PhpWord\Settings;
 use PhpOffice\PhpWord\Shared\XMLReader;
 
 /**
@@ -260,7 +261,8 @@ abstract class AbstractPart
                     }
                 }
             }
-            $parent->addPreserveText(htmlspecialchars($textContent, ENT_QUOTES, 'UTF-8'), $fontStyle, $paragraphStyle);
+            $textContent = self::escapeOrNot($textContent);
+            $parent->addPreserveText($textContent, $fontStyle, $paragraphStyle);
 
             return;
         }
@@ -302,7 +304,7 @@ abstract class AbstractPart
             $nodes = $xmlReader->getElements('w:r|w:hyperlink', $domNode);
             $hasRubyElement = $xmlReader->elementExists('w:r/w:ruby', $domNode);
             if ($nodes->length === 1 && !$hasRubyElement) {
-                $textContent = htmlspecialchars($xmlReader->getValue('w:t', $nodes->item(0)), ENT_QUOTES, 'UTF-8');
+                $textContent = self::escapeOrNot($xmlReader->getValue('w:t', $nodes->item(0)));
             } else {
                 $textContent = new TextRun($paragraphStyle);
                 foreach ($nodes as $node) {
@@ -429,8 +431,9 @@ abstract class AbstractPart
                     $textContent .= $xmlReader->getValue('w:t', $node);
                 }
             }
-            $formField->setValue(htmlspecialchars($textContent, ENT_QUOTES, 'UTF-8'));
-            $formField->setText(htmlspecialchars($textContent, ENT_QUOTES, 'UTF-8'));
+            $textContent = self::escapeOrNot($textContent);
+            $formField->setValue($textContent);
+            $formField->setText($textContent);
         }
     }
 
@@ -570,14 +573,14 @@ abstract class AbstractPart
                 if ($fallbackElements->length) {
                     $fallback = $fallbackElements->item(0);
                     // TextRun
-                    $textContent = htmlspecialchars($fallback->nodeValue, ENT_QUOTES, 'UTF-8');
+                    $textContent = self::escapeOrNot($fallback->nodeValue);
 
                     $parent->addText($textContent, $fontStyle, $paragraphStyle);
                 }
             }
         } elseif ($node->nodeName == 'w:t' || $node->nodeName == 'w:delText') {
             // TextRun
-            $textContent = htmlspecialchars($xmlReader->getValue('.', $node), ENT_QUOTES, 'UTF-8');
+            $textContent = self::escapeOrNot($xmlReader->getValue('.', $node));
 
             if ($runParent->nodeName == 'w:hyperlink') {
                 $rId = $xmlReader->getAttribute('r:id', $runParent);
@@ -1089,5 +1092,18 @@ abstract class AbstractPart
         }
 
         return $mode;
+    }
+
+    /**
+     * Silly function to avoid BC break when not escaping.
+     *
+     * @param string $str
+     *
+     * @return string
+     */
+    private function escapeOrNot($str)
+    {
+        // test looks backwards, but, trust me, it isn't
+        return Settings::isOutputEscapingEnabled() ? $str : htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
     }
 }
