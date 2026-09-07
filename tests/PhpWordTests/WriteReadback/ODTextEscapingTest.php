@@ -31,11 +31,20 @@ use PhpOffice\PhpWord\Writer\ODText;
  */
 class ODTextEscapingTest extends \PHPUnit\Framework\TestCase
 {
+    /** @var string */
+    private $fileName = '';
+
     /**
      * Executed after each method of the class.
      */
     protected function tearDown(): void
     {
+        if ($this->fileName !== '') {
+            unlink($this->fileName);
+            $this->fileName = '';
+        }
+        libxml_clear_errors();
+        libxml_use_internal_errors(false);
         Settings::restoreDefaults();
     }
 
@@ -51,18 +60,24 @@ class ODTextEscapingTest extends \PHPUnit\Framework\TestCase
         $sectionWriter->addText($testText);
 
         $writer = new ODText($phpWordWriter);
-        $file = PHPWORD_TEST_TEMP_DIR . DIRECTORY_SEPARATOR . 'temp.docx';
-        $writer->save($file);
+        $this->fileName = PHPWORD_TEST_TEMP_DIR . DIRECTORY_SEPARATOR . 'escaping1.odt';
+        $writer->save($this->fileName);
 
-        self::assertFileExists($file);
+        self::assertFileExists($this->fileName);
 
-        $phpWordReader = IOFactory::load($file, 'ODText');
+        libxml_use_internal_errors(true);
+        $phpWordReader = IOFactory::load($this->fileName, 'ODText');
+
+        $fatal = false;
+        foreach (libxml_get_errors() as $err) {
+            $fatal = $fatal || $err->level === LIBXML_ERR_FATAL;
+        }
+        self::assertFalse($fatal);
 
         self::assertCount(1, $phpWordReader->getSections());
         self::assertCount(1, $phpWordReader->getSections()[0]->getElements());
         self::assertInstanceOf(TextRun::class, $phpWordReader->getSections()[0]->getElements()[0]);
         self::assertEquals($testText, $phpWordReader->getSections()[0]->getElements()[0]->getText());
-        unlink($file);
     }
 
     /**
@@ -70,7 +85,6 @@ class ODTextEscapingTest extends \PHPUnit\Framework\TestCase
      */
     public function testNoEscapingBad(): void
     {
-        $this->expectExceptionMessage('DOMDocument::loadXML()');
         Settings::setOutputEscapingEnabled(false);
         $phpWordWriter = new PhpWord();
         $testText = '6+5 < 12';
@@ -78,18 +92,19 @@ class ODTextEscapingTest extends \PHPUnit\Framework\TestCase
         $sectionWriter->addText($testText);
 
         $writer = new ODText($phpWordWriter);
-        $file = PHPWORD_TEST_TEMP_DIR . DIRECTORY_SEPARATOR . 'temp.docx';
-        $writer->save($file);
+        $this->fileName = PHPWORD_TEST_TEMP_DIR . DIRECTORY_SEPARATOR . 'escaping2.odt';
+        $writer->save($this->fileName);
 
-        self::assertFileExists($file);
+        self::assertFileExists($this->fileName);
 
-        $phpWordReader = IOFactory::load($file, 'ODText');
+        libxml_use_internal_errors(true);
+        $phpWordReader = IOFactory::load($this->fileName, 'ODText');
 
-        self::assertCount(1, $phpWordReader->getSections());
-        self::assertCount(1, $phpWordReader->getSections()[0]->getElements());
-        self::assertInstanceOf(TextRun::class, $phpWordReader->getSections()[0]->getElements()[0]);
-        self::assertEquals($testText, $phpWordReader->getSections()[0]->getElements()[0]->getText());
-        unlink($file);
+        $fatal = false;
+        foreach (libxml_get_errors() as $err) {
+            $fatal = $fatal || $err->level === LIBXML_ERR_FATAL;
+        }
+        self::assertTrue($fatal);
     }
 
     /**
@@ -105,17 +120,23 @@ class ODTextEscapingTest extends \PHPUnit\Framework\TestCase
         $sectionWriter->addText($testText);
 
         $writer = new ODText($phpWordWriter);
-        $file = PHPWORD_TEST_TEMP_DIR . DIRECTORY_SEPARATOR . 'temp.docx';
-        $writer->save($file);
+        $this->fileName = PHPWORD_TEST_TEMP_DIR . DIRECTORY_SEPARATOR . 'temp.docx';
+        $writer->save($this->fileName);
 
-        self::assertFileExists($file);
+        self::assertFileExists($this->fileName);
 
-        $phpWordReader = IOFactory::load($file, 'ODText');
+        libxml_use_internal_errors(true);
+        $phpWordReader = IOFactory::load($this->fileName, 'ODText');
+
+        $fatal = false;
+        foreach (libxml_get_errors() as $err) {
+            $fatal = $fatal || $err->level === LIBXML_ERR_FATAL;
+        }
+        self::assertFalse($fatal);
 
         self::assertCount(1, $phpWordReader->getSections());
         self::assertCount(1, $phpWordReader->getSections()[0]->getElements());
         self::assertInstanceOf(TextRun::class, $phpWordReader->getSections()[0]->getElements()[0]);
         self::assertEquals($testTextOut, $phpWordReader->getSections()[0]->getElements()[0]->getText());
-        unlink($file);
     }
 }

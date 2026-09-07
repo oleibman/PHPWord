@@ -63,7 +63,7 @@ class XMLWriter extends \XMLWriter
      */
     public function __construct($pTemporaryStorage = self::STORAGE_MEMORY, $pTemporaryStorageDir = null, $compatibility = false)
     {
-        $this->hash = spl_object_hash($this);
+        $this->hash = $this->getHashIdAsString();
         // Open temporary storage
         if ($pTemporaryStorage == self::STORAGE_MEMORY) {
             $this->openMemory();
@@ -92,7 +92,7 @@ class XMLWriter extends \XMLWriter
      */
     public function __destruct()
     {
-        if ($this->hash !== spl_object_hash($this)) {
+        if ($this->hash !== $this->getHashIdAsString()) {
             throw new WordException('Unserialize not permitted1');
         }
         // Unlink temporary files
@@ -100,6 +100,11 @@ class XMLWriter extends \XMLWriter
             return;
         }
         @unlink($this->tempFileName);
+    }
+
+    private function getHashIdAsString(): string
+    {
+        return function_exists('spl_object_id') ? ((string) spl_object_id($this)) : spl_object_hash($this);
     }
 
     /** @codeCoverageIgnore */
