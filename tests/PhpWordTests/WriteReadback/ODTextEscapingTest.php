@@ -19,6 +19,7 @@
 namespace PhpOffice\PhpWordTests\WriteReadback;
 
 use PhpOffice\PhpWord\Element\TextRun;
+use PhpOffice\PhpWord\Exception\Exception as WordException;
 use PhpOffice\PhpWord\IOFactory;
 use PhpOffice\PhpWord\PhpWord;
 use PhpOffice\PhpWord\Settings;
@@ -43,8 +44,6 @@ class ODTextEscapingTest extends \PHPUnit\Framework\TestCase
             unlink($this->fileName);
             $this->fileName = '';
         }
-        libxml_clear_errors();
-        libxml_use_internal_errors(false);
         Settings::restoreDefaults();
     }
 
@@ -65,14 +64,7 @@ class ODTextEscapingTest extends \PHPUnit\Framework\TestCase
 
         self::assertFileExists($this->fileName);
 
-        libxml_use_internal_errors(true);
         $phpWordReader = IOFactory::load($this->fileName, 'ODText');
-
-        $fatal = false;
-        foreach (libxml_get_errors() as $err) {
-            $fatal = $fatal || $err->level === LIBXML_ERR_FATAL;
-        }
-        self::assertFalse($fatal);
 
         self::assertCount(1, $phpWordReader->getSections());
         self::assertCount(1, $phpWordReader->getSections()[0]->getElements());
@@ -85,6 +77,8 @@ class ODTextEscapingTest extends \PHPUnit\Framework\TestCase
      */
     public function testNoEscapingBad(): void
     {
+        $this->expectException(WordException::class);
+        $this->expectExceptionMessage('StartTag');
         Settings::setOutputEscapingEnabled(false);
         $phpWordWriter = new PhpWord();
         $testText = '6+5 < 12';
@@ -97,14 +91,7 @@ class ODTextEscapingTest extends \PHPUnit\Framework\TestCase
 
         self::assertFileExists($this->fileName);
 
-        libxml_use_internal_errors(true);
-        $phpWordReader = IOFactory::load($this->fileName, 'ODText');
-
-        $fatal = false;
-        foreach (libxml_get_errors() as $err) {
-            $fatal = $fatal || $err->level === LIBXML_ERR_FATAL;
-        }
-        self::assertTrue($fatal);
+        IOFactory::load($this->fileName, 'ODText');
     }
 
     /**
@@ -125,14 +112,7 @@ class ODTextEscapingTest extends \PHPUnit\Framework\TestCase
 
         self::assertFileExists($this->fileName);
 
-        libxml_use_internal_errors(true);
         $phpWordReader = IOFactory::load($this->fileName, 'ODText');
-
-        $fatal = false;
-        foreach (libxml_get_errors() as $err) {
-            $fatal = $fatal || $err->level === LIBXML_ERR_FATAL;
-        }
-        self::assertFalse($fatal);
 
         self::assertCount(1, $phpWordReader->getSections());
         self::assertCount(1, $phpWordReader->getSections()[0]->getElements());
