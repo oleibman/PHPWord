@@ -304,7 +304,7 @@ abstract class AbstractPart
             $nodes = $xmlReader->getElements('w:r|w:hyperlink', $domNode);
             $hasRubyElement = $xmlReader->elementExists('w:r/w:ruby', $domNode);
             if ($nodes->length === 1 && !$hasRubyElement) {
-                $textContent = self::escapeOrNot($xmlReader->getValue('w:t', $nodes->item(0)));
+                $textContent = self::escapeOrNot($xmlReader->getValue('w:t', $nodes->item(0)) ?? '');
             } else {
                 $textContent = new TextRun($paragraphStyle);
                 foreach ($nodes as $node) {
@@ -573,14 +573,14 @@ abstract class AbstractPart
                 if ($fallbackElements->length) {
                     $fallback = $fallbackElements->item(0);
                     // TextRun
-                    $textContent = self::escapeOrNot($fallback->nodeValue);
+                    $textContent = self::escapeOrNot($fallback->nodeValue) ?? '';
 
                     $parent->addText($textContent, $fontStyle, $paragraphStyle);
                 }
             }
         } elseif ($node->nodeName == 'w:t' || $node->nodeName == 'w:delText') {
             // TextRun
-            $textContent = self::escapeOrNot($xmlReader->getValue('.', $node));
+            $textContent = self::escapeOrNot($xmlReader->getValue('.', $node) ?? '');
 
             if ($runParent->nodeName == 'w:hyperlink') {
                 $rId = $xmlReader->getAttribute('r:id', $runParent);
